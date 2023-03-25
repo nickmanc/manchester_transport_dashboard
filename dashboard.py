@@ -42,19 +42,19 @@ def get_cached_bus_stations():
 # st_autorefresh(interval=60 * 1000)
 st_autorefresh(interval=15 * 1000)
 with st.sidebar:
-    selected_dashboard_title = st.text_input("Dashboard title", "Cooke Residence")
+    selected_dashboard_title = st.text_input("Dashboard title", "Manchester Transport Dashboard")
 
     tram_stops = get_cached_list_of_tram_stops()
     selected_tram_stop_name = st.selectbox(
-        'Select a metrolink stop', (list(tram_stops.keys())))
+        'Select a metrolink stop', (list(tram_stops.keys())), default="Piccadilly")
     tram_stop_ids = tram_stops[selected_tram_stop_name]["location_ids"]
 
     rail_stations = get_cached_rail_stations()
-    selected_train_station_name = st.selectbox('Select a train station', sorted(rail_stations))
+    selected_train_station_name = st.selectbox('Select a train station', sorted(rail_stations), default="Manchester Piccadilly")
     show_arrivals = st.checkbox('Show arrivals')
 
     bus_stations = get_cached_bus_stations()
-    selected_bus_station_name = st.selectbox('Select a bus station', sorted(bus_stations))
+    selected_bus_station_name = st.selectbox('Select a bus station', sorted(bus_stations), default="Manchester Piccadilly Gardens bus station")
 
 titleCol1, titleCol2 = st.columns([5, 1])
 # titleCol1.image("resources/HPTLogo.png", width=200)
