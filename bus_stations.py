@@ -19,7 +19,8 @@ def get_bus_stations():
         data = response.json()
         for station in data:
             if station["mode"] == 'bus':
-                bus_stations[station['name']] = {"id": station['id'], "href": station['href']}
+                name = station['name'].replace("bus station", "").strip()
+                bus_stations[name] = {"id": station['id'], "href": station['href']}
     except Exception:
         logging.exception('Exception when retrieving bus stations')
     return bus_stations

@@ -45,16 +45,22 @@ with st.sidebar:
     selected_dashboard_title = st.text_input("Dashboard title", "Manchester Transport Dashboard")
 
     tram_stops = get_cached_list_of_tram_stops()
+    tram_stop_names = sorted(list(tram_stops.keys()))
+    default_index = tram_stop_names.index("Piccadilly")
     selected_tram_stop_name = st.selectbox(
-        'Select a metrolink stop', (list(tram_stops.keys())), default="Piccadilly")
+        'Select a metrolink stop', (tram_stop_names), index=default_index)
     tram_stop_ids = tram_stops[selected_tram_stop_name]["location_ids"]
 
     rail_stations = get_cached_rail_stations()
-    selected_train_station_name = st.selectbox('Select a train station', sorted(rail_stations), default="Manchester Piccadilly")
+    rail_station_names = sorted(list(rail_stations.keys()))
+    default_index = rail_station_names.index("Manchester Piccadilly")
+    selected_train_station_name = st.selectbox('Select a train station', rail_station_names, index=default_index)
     show_arrivals = st.checkbox('Show arrivals')
 
     bus_stations = get_cached_bus_stations()
-    selected_bus_station_name = st.selectbox('Select a bus station', sorted(bus_stations), default="Manchester Piccadilly Gardens bus station")
+    bus_station_names = sorted(list(bus_stations.keys()))
+    default_index = bus_station_names.index("Manchester Piccadilly Gardens")
+    selected_bus_station_name = st.selectbox('Select a bus station', bus_station_names, index=default_index)
 
 titleCol1, titleCol2 = st.columns([5, 1])
 # titleCol1.image("resources/HPTLogo.png", width=200)
