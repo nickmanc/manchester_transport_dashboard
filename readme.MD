@@ -1,4 +1,23 @@
-### Getting a list of staions
+### Required API Keys
+You'll need to get a API keys for the services this application uses.  Store in a file .streamlit/secrets.toml using this template
+
+    #datafeeds.nationalrail.co.uk_credentials
+    datafeeds_nationalrail_co_uk_username=
+    datafeeds_nationalrail_co_uk_password=
+    
+    #lite.realtime.nationalrail.co.uk_credentials
+    open_ldbws_token=
+    
+    #tfgm credentials
+    api_tfgm_com_key=
+
+You can register for keys using the following links:
+
+TFGM: https://developer.tfgm.com/
+Open LDBWS: https://lite.realtime.nationalrail.co.uk/OpenLDBWSRegistration/
+datafeeds.nationalrail.co.uk: https://opendata.nationalrail.co.uk/
+
+### Getting a list of stations
 
 use
 
