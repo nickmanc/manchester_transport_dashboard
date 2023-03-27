@@ -54,7 +54,7 @@ presets = {"Altrincham": {"Title":"Altrincham", "Metrolink":"Altrincham", "Rail"
 # st_autorefresh(interval=60 * 1000)
 st_autorefresh(interval=20 * 1000)
 with st.sidebar:
-    selectedPreset = st.radio("Select a preset", presets.keys())
+    selectedPreset = st.radio("Select a preset, or customise your own dashboard", presets.keys())
     # st.session_state['selectedPreset'] = st.radio("Select a preset", presets.keys())
     selected_dashboard_title = st.text_input("Dashboard title", f"{presets[selectedPreset]['Title']} Transport Dashboard", disabled=selectedPreset!='Custom')
 

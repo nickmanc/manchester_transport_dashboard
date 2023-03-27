@@ -81,3 +81,4 @@ jobs:
           --region ${{ env.AWS_REGION }} \
           --service-name ${service_name} \
           --no-is-disabled
+        
