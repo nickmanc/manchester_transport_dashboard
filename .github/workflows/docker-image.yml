@@ -2,6 +2,7 @@ name: Docker Image CI
 
 env:
   IMAGE_VERSION: 0.0.${{github.run_number}}
+  AWS_REGION: eu-west-2
 
 on:
   push:
@@ -17,6 +18,26 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Install Utilities
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq unzip
+    - name: Install AWS Client
+      run: |
+        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip awscliv2.zip
+        sudo ./aws/install || true
+        aws --version
+        curl "https://s3.us-west-2.amazonaws.com/lightsailctl/latest/linux-amd64/lightsailctl" -o "lightsailctl"
+        sudo mv "lightsailctl" "/usr/local/bin/lightsailctl"
+        sudo chmod +x /usr/local/bin/lightsailctl
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: ${{ env.AWS_REGION }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -52,3 +73,16 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+
+    - name: Update Lightsail service
+      run: |
+        service_name=manchester-transport-dashboard
+        aws lightsail update-container-service \
+          --region ${{ env.AWS_REGION }} \
+          --service-name ${service_name} \
+          --is-disabled
+        
+        aws lightsail update-container-service \
+          --region ${{ env.AWS_REGION }} \
+          --service-name ${service_name} \
+          --no-is-disabled
