@@ -41,14 +41,14 @@ jobs:
         flavor: latest=true
         tags: |
           type=ref,event=branch
-          type=semver,pattern={{version}},value=$IMAGE_VERSION
+          type=semver,pattern={{version}},value=${{IMAGE_VERSION}}
 
     - name: Build and push Docker images
       uses: docker/build-push-action@v4
       with:
         context: .
         build-args: |
-          DASHBOARD_BUILD_VERSION=$IMAGE_VERSION
+          DASHBOARD_BUILD_VERSION=${{IMAGE_VERSION}}
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
