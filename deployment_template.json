@@ -1,0 +1,30 @@
+{
+  "serviceName": "manchester-transport-dashboard",
+  "containers": {
+    "manchester-transport-dashboard": {
+      "image": "nickmanc/manchester-transport-dashboard:latest",
+      "command": [],
+      "environment": {
+        "api_tfgm_com_key": "XXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "datafeeds_nationalrail_co_uk_password": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        "datafeeds_nationalrail_co_uk_username": "XXXXXXXXXXXXXXXX",
+        "open_ldbws_token": "XXXXXXXXXXXXXXXXXXXX"
+      },
+      "ports": {
+        "8501": "HTTP"
+      }
+    }
+  },
+  "publicEndpoint": {
+    "containerName": "manchester-transport-dashboard",
+    "containerPort": 8501,
+    "healthCheck": {
+      "healthyThreshold": 2,
+      "unhealthyThreshold": 2,
+      "timeoutSeconds": 2,
+      "intervalSeconds": 5,
+      "path": "/_stcore/health",
+      "successCodes": "200-499"
+    }
+  }
+}
