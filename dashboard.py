@@ -70,7 +70,8 @@ titleCol1, titleCol2 = st.columns([5, 1])
 # titleCol1.image("resources/HPTLogo.png", width=200)
 titleCol1.title(selected_dashboard_title)
 manchester_tz = pytz.timezone('Europe/London')
-titleCol2.title(datetime.now().astimezone(manchester_tz).strftime("%H:%M"))
+current_manchester_time = datetime.now().astimezone(manchester_tz)
+titleCol2.title(current_manchester_time.strftime("%H:%M"))
 
 col1, col2, col3 = st.columns(3)
 # Display tram information in a table
@@ -165,7 +166,7 @@ footer = f"""<style>
 <div class="footer">
   <table>
     <tr>
-      <td>Last updated: {datetime.now().strftime('%H:%M:%S')}</td>
+      <td>Last updated: {current_manchester_time.strftime('%H:%M:%S')}</td>
       <td>Powered by National Rail Enquiries.</td>
       <td>Contains Transport for Greater Manchester data</td>
     </tr>
