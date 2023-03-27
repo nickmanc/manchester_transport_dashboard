@@ -38,7 +38,7 @@ jobs:
         flavor: latest=true
         tags: |
           type=ref,event=branch
-          type=semver,pattern={{version}},value=0.0.{{github.run_number}}
+          type=semver,pattern={{version}},value=0.0.${{github.run_number}}
 
     - name: Build and push Docker images
       uses: docker/build-push-action@v4
