@@ -33,7 +33,7 @@ jobs:
         sudo mv "lightsailctl" "/usr/local/bin/lightsailctl"
         sudo chmod +x /usr/local/bin/lightsailctl
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-region: ${{ env.AWS_REGION }}
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -77,11 +77,6 @@ jobs:
     - name: Update Lightsail service
       run: |
         service_name=manchester-transport-dashboard
-        aws lightsail update-container-service \
-          --region ${{ env.AWS_REGION }} \
-          --service-name ${service_name} \
-          --is-disabled
-        
         aws lightsail update-container-service \
           --region ${{ env.AWS_REGION }} \
           --service-name ${service_name} \
