@@ -4,6 +4,9 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
+ARG DASHBOARD_BUILD_VERSION
+ENV DASHBOARD_BUILD_VERSION=${DASHBOARD_BUILD_VERSION:-NOT_DEFINED}
+
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \

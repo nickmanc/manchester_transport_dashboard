@@ -5,7 +5,7 @@
 
 export VERSION=$1
 
-docker build -t manchester-transport-dashboard .
+docker build --build-arg DASHBOARD_BUILD_VERSION=$VERSION -t manchester-transport-dashboard .
 BUILD_SUCCESS=$?
 
 if [ $BUILD_SUCCESS -eq 0 ]; then

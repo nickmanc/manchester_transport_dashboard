@@ -5,5 +5,9 @@ services:
         build:
           context: .
           dockerfile: Dockerfile
+          args:
+            DASHBOARD_BUILD_VERSION: docker_compose_version
+        env_file:
+          - .streamlit/secrets.toml
         ports:
           - 8501:8501

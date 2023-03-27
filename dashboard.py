@@ -1,3 +1,5 @@
+import os
+
 import pytz
 import streamlit as st
 from datetime import datetime
@@ -43,31 +45,38 @@ def get_cached_bus_stations():
     return get_bus_stations()
 
 
+presets = {"Altrincham": {"Title":"Altrincham", "Metrolink":"Altrincham", "Rail":"Altrincham", "Bus":"Altrincham Interchange"},
+           "Piccadilly": {"Title":"Manchester Piccadilly", "Metrolink":"Piccadilly", "Rail":"Manchester Piccadilly", "Bus":"Manchester Piccadilly Gardens"},
+           "Ashton": {"Title":"Ashton", "Metrolink":"Ashton-Under-Lyne", "Rail":"Ashton-under-Lyne", "Bus":"Ashton-under-Lyne Interchange"},
+           "Airport": {"Title":"Manchester Airport", "Metrolink":"Manchester Airport", "Rail":"Manchester Airport", "Bus":"Manchester Airport The Station"},
+           "Custom":{"Title":"Manchester", "Metrolink":"Piccadilly", "Rail":"Manchester Piccadilly", "Bus":"Manchester Piccadilly Gardens"}}
+
 # st_autorefresh(interval=60 * 1000)
 st_autorefresh(interval=20 * 1000)
 with st.sidebar:
-    selected_dashboard_title = st.text_input("Dashboard title", "Manchester Transport Dashboard")
+    selectedPreset = st.radio("Select a preset", presets.keys())
+    # st.session_state['selectedPreset'] = st.radio("Select a preset", presets.keys())
+    selected_dashboard_title = st.text_input("Dashboard title", f"{presets[selectedPreset]['Title']} Transport Dashboard", disabled=selectedPreset!='Custom')
 
     tram_stops = get_cached_list_of_tram_stops()
     tram_stop_names = sorted(list(tram_stops.keys()))
-    default_index = tram_stop_names.index("Piccadilly")
+    default_index = tram_stop_names.index(presets[selectedPreset]['Metrolink'])
     selected_tram_stop_name = st.selectbox(
-        'Select a metrolink stop', (tram_stop_names), index=default_index)
+        'Select a metrolink stop', (tram_stop_names), index=default_index, disabled=selectedPreset!='Custom')
     tram_stop_ids = tram_stops[selected_tram_stop_name]["location_ids"]
 
     rail_stations = get_cached_rail_stations()
     rail_station_names = sorted(list(rail_stations.keys()))
-    default_index = rail_station_names.index("Manchester Piccadilly")
-    selected_train_station_name = st.selectbox('Select a train station', rail_station_names, index=default_index)
-    show_arrivals = st.checkbox('Show arrivals')
+    default_index = rail_station_names.index(presets[selectedPreset]['Rail'])
+    selected_train_station_name = st.selectbox('Select a train station', rail_station_names, index=default_index, disabled=selectedPreset!='Custom')
+    show_arrivals = st.checkbox('Show arrivals', disabled=selectedPreset!='Custom')
 
     bus_stations = get_cached_bus_stations()
     bus_station_names = sorted(list(bus_stations.keys()))
-    default_index = bus_station_names.index("Manchester Piccadilly Gardens")
-    selected_bus_station_name = st.selectbox('Select a bus station', bus_station_names, index=default_index)
+    default_index = bus_station_names.index(presets[selectedPreset]['Bus'])
+    selected_bus_station_name = st.selectbox('Select a bus station', bus_station_names, index=default_index, disabled=selectedPreset!='Custom')
 
 titleCol1, titleCol2 = st.columns([5, 1])
-# titleCol1.image("resources/HPTLogo.png", width=200)
 titleCol1.title(selected_dashboard_title)
 manchester_tz = pytz.timezone('Europe/London')
 current_manchester_time = datetime.now().astimezone(manchester_tz)
@@ -169,6 +178,7 @@ footer = f"""<style>
       <td>Last updated: {current_manchester_time.strftime('%H:%M:%S')}</td>
       <td>Powered by National Rail Enquiries.</td>
       <td>Contains Transport for Greater Manchester data</td>
+      <td>Version: {os.getenv("DASHBOARD_BUILD_VERSION","local")}</td>
     </tr>
   </table>
 </div>
