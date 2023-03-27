@@ -1,9 +1,9 @@
+import os
+import logging
 from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
-import logging
-import streamlit as st
 
-LDB_TOKEN = st.secrets.lite.realtime.nationalrail.co.uk_credentials.open.ldbws.token
+LDB_TOKEN = os.environ["open_ldbws_token"]
 WSDL = 'http://lite.realtime.nationalrail.co.uk/OpenLDBWS/wsdl.aspx?ver=2021-11-01'
 
 settings = Settings(strict=False)
@@ -25,13 +25,16 @@ def get_train_departures(station_code):
     departures = []
     try:
         station_board = client.service.GetDepartureBoard(numRows=10, crs=station_code, _soapheaders=[header_value])
-        services = station_board.trainServices.service
-        for service in services:
-            departures.append({"due": service.std, "expected": "" if service.etd == 'On time' else service.etd,
-                               "destination": service.destination.location[0].locationName, "platform": service.platform})
+        if station_board.trainServices is not None:
+            services = station_board.trainServices.service
+            for service in services:
+                departures.append({"due": service.std, "expected": "" if service.etd == 'On time' else service.etd,
+                                   "destination": service.destination.location[0].locationName,
+                                   "platform": service.platform})
     except Exception:
-        logging.exception('Exception when retrieving departures')
+        logging.exception(f'Exception when retrieving departures for {station_code}')
     return departures
+
 
 def get_train_arrivals(station_code):
     arrivals = []
@@ -40,9 +43,7 @@ def get_train_arrivals(station_code):
         services = station_board.trainServices.service
         for service in services:
             arrivals.append({"due": service.sta, "expected": "" if service.eta == 'On time' else service.eta,
-                               "destination": service.origin.location[0].locationName, "platform": service.platform})
+                             "destination": service.origin.location[0].locationName, "platform": service.platform})
     except Exception:
         logging.exception('Exception when retrieving arrivals')
     return arrivals
-
-

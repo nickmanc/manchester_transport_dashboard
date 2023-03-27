@@ -3,7 +3,7 @@ import org.jenkinsci.plugins.workflow.libs.Library
 
 @Library(['jenkins-global-libraries', 'jenkins-build-config']) _
 
-String applicationName = "altrincham-transport-dashboard"
+String applicationName = "manchester-transport-dashboard"
 String applicationVersion = "0.1.${env.BUILD_NUMBER}"
 pipeline {
     agent { label 'linux' }

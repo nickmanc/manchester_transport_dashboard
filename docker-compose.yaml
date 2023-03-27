@@ -1,7 +1,7 @@
 version: "3.9"
 services:
     streamlit:
-        image: transport-dashboard
+        image: manchester-transport-dashboard
         build:
           context: .
           dockerfile: Dockerfile

@@ -1,4 +1,6 @@
 import logging
+import os
+
 import streamlit as st
 import requests
 import xml.etree.ElementTree as et
@@ -7,8 +9,8 @@ import xml.etree.ElementTree as et
 def get_authentication_token():
     logging.info("Getting datafeeds.nationalrail.co.uk authentication token")
     url = "https://datafeeds.nationalrail.co.uk/authenticate"
-    data = {"username": st.secrets.datafeeds.nationalrail.co.uk_credentials.username,
-            "password": st.secrets.datafeeds.nationalrail.co.uk_credentials.password}
+    data = {"username": os.environ["datafeeds_nationalrail_co_uk_username"],
+            "password": os.environ["datafeeds_nationalrail_co_uk_password"]}
     requests.urllib3.disable_warnings()
     response = requests.post(url, data=data, verify=False)
     if response.status_code == 200:

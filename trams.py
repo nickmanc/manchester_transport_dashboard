@@ -1,6 +1,5 @@
-import pprint as pp
+import os
 import requests
-import streamlit as st
 import logging
 
 # TfGM API endpoint and parameters
@@ -8,7 +7,7 @@ api_endpoint = "https://api.tfgm.com/odata/Metrolinks(15621)"
 params = {
     "$format": "json"
 }
-headers = {"Ocp-Apim-Subscription-Key": st.secrets.api.tfgm.com_credentials.api.key}
+headers = {"Ocp-Apim-Subscription-Key": os.environ["api_tfgm_com_key"]}
 
 
 def get_tram_stop_additional_info_href(stop_name):

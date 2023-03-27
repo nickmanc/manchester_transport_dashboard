@@ -5,10 +5,10 @@
 
 export VERSION=$1
 
-docker build -t transport-dashboard .
+docker build -t manchester-transport-dashboard .
 BUILD_SUCCESS=$?
 
 if [ $BUILD_SUCCESS -eq 0 ]; then
-  docker tag transport-dashboard nexus-altdev.services.aquilaheywood.co.uk/transport-dashboard:$VERSION
-  docker push nexus-altdev.services.aquilaheywood.co.uk/transport-dashboard:$VERSION
+  docker tag manchester-transport-dashboard nickmanc/manchester-transport-dashboard:$VERSION
+  docker push nickmanc/manchester-transport-dashboard:$VERSION
 fi

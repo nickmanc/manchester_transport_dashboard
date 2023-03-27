@@ -1,3 +1,4 @@
+import pytz
 import streamlit as st
 from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
@@ -31,13 +32,16 @@ st.markdown(
 def get_cached_list_of_tram_stops():
     return get_tram_stations()
 
+
 @st.cache_data(ttl=60 * 60 * 24)
 def get_cached_rail_stations():
     return get_rail_stations()
 
+
 @st.cache_data(ttl=60 * 60 * 24)
 def get_cached_bus_stations():
     return get_bus_stations()
+
 
 # st_autorefresh(interval=60 * 1000)
 st_autorefresh(interval=15 * 1000)
@@ -65,11 +69,13 @@ with st.sidebar:
 titleCol1, titleCol2 = st.columns([5, 1])
 # titleCol1.image("resources/HPTLogo.png", width=200)
 titleCol1.title(selected_dashboard_title)
-titleCol2.title(datetime.now().strftime("%H:%M"))
+manchester_tz = pytz.timezone('Europe/London')
+titleCol2.title(datetime.now().astimezone(manchester_tz).strftime("%H:%M"))
 
 col1, col2, col3 = st.columns(3)
 # Display tram information in a table
-col1.subheader(f"[Metrolink ({selected_tram_stop_name})](https://tfgm.com{tram_stops[selected_tram_stop_name]['href']})")
+col1.subheader(
+    f"[Metrolink ({selected_tram_stop_name})](https://tfgm.com{tram_stops[selected_tram_stop_name]['href']})")
 tramDepartureInfo = get_tram_departures(tram_stop_ids)
 trams = tramDepartureInfo[0]
 if len(trams) > 0:
@@ -99,7 +105,8 @@ if len(metrolinkLineStatuses) > 0:
 else:
     col1.write("No line status available.")
 
-col2.subheader(f"[Rail({selected_train_station_name})](https://ojp.nationalrail.co.uk/service/ldbboard/dep/{rail_stations[selected_train_station_name]})")
+col2.subheader(
+    f"[Rail({selected_train_station_name})](https://ojp.nationalrail.co.uk/service/ldbboard/dep/{rail_stations[selected_train_station_name]})")
 col2.subheader("Departures")
 trains = get_train_departures(rail_stations[selected_train_station_name])
 if len(trains) > 0:
@@ -123,7 +130,8 @@ if show_arrivals:
     else:
         col2.write("No trains currently scheduled to arrive.")
 
-col3.subheader(f"[Bus ({selected_bus_station_name})](https://tfgm.com{bus_stations[selected_bus_station_name]['href']})")
+col3.subheader(
+    f"[Bus ({selected_bus_station_name})](https://tfgm.com{bus_stations[selected_bus_station_name]['href']})")
 buses = get_bus_departures(bus_stations[selected_bus_station_name]['id'])
 if len(buses) > 0:
     for bus in buses:
