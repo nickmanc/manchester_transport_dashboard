@@ -1,5 +1,8 @@
 name: Docker Image CI
 
+env:
+  IMAGE_VERSION: 0.0.${{github.run_number}}
+
 on:
   push:
     branches: [ "main" ]
@@ -38,12 +41,14 @@ jobs:
         flavor: latest=true
         tags: |
           type=ref,event=branch
-          type=semver,pattern={{version}},value=0.0.${{github.run_number}}
+          type=semver,pattern={{version}},value=env.IMAGE_VERSION
 
     - name: Build and push Docker images
       uses: docker/build-push-action@v4
       with:
         context: .
+        build-args: |
+          DASHBOARD_BUILD_VERSION=env.IMAGE_VERSION
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
