@@ -44,7 +44,7 @@ def get_cached_bus_stations():
 
 
 # st_autorefresh(interval=60 * 1000)
-st_autorefresh(interval=30 * 1000)
+st_autorefresh(interval=20 * 1000)
 with st.sidebar:
     selected_dashboard_title = st.text_input("Dashboard title", "Manchester Transport Dashboard")
 
