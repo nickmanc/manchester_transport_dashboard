@@ -1,5 +1,5 @@
 ### Required API Keys
-You'll need to get a API keys for the services this application uses.  Store in a file .streamlit/secrets.toml using this template
+You'll need to get a API keys for the services this application uses.  For local use these can be stored in a file .streamlit/secrets.toml using this template
 
     #datafeeds.nationalrail.co.uk_credentials
     datafeeds_nationalrail_co_uk_username=
@@ -10,6 +10,8 @@ You'll need to get a API keys for the services this application uses.  Store in 
     
     #tfgm credentials
     api_tfgm_com_key=
+
+Make them available as environment variables if you want to use them in a docker container
 
 You can register for keys using the following links:
 
