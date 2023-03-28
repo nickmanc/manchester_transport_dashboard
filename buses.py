@@ -1,9 +1,10 @@
 import logging
 import requests
 import re
+import streamlit as st
 from bs4 import BeautifulSoup
 
-
+@st.cache_data(ttl=10)
 def get_bus_departures(station):
     #no api for this I can find so scraping the website
     url = f"https://tfgm.com/public-transport/bus/stations/{station}"
@@ -25,4 +26,5 @@ def get_bus_departures(station):
                                "live": live, "number": bus_number, "operator": bus_operator})
     except Exception:
         logging.exception('Exception when retrieving buses')
+    logging.info(f"bus departures for {station}: {departures}")
     return departures

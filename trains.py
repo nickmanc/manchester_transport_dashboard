@@ -1,5 +1,6 @@
 import os
 import logging
+import streamlit as st
 from zeep import Client, Settings, xsd
 from zeep.plugins import HistoryPlugin
 
@@ -21,6 +22,7 @@ header = xsd.Element(
 header_value = header(TokenValue=LDB_TOKEN)
 
 
+@st.cache_data(ttl=10)
 def get_train_departures(station_code):
     departures = []
     try:
@@ -33,9 +35,11 @@ def get_train_departures(station_code):
                                    "platform": service.platform})
     except Exception:
         logging.exception(f'Exception when retrieving departures for {station_code}')
+    logging.info(f"train departures for {station_code}: {departures}")
     return departures
 
 
+@st.cache_data(ttl=10)
 def get_train_arrivals(station_code):
     arrivals = []
     try:
@@ -46,4 +50,5 @@ def get_train_arrivals(station_code):
                              "destination": service.origin.location[0].locationName, "platform": service.platform})
     except Exception:
         logging.exception('Exception when retrieving arrivals')
+    logging.info(f"train arrivals for {station_code}: {arrivals}")
     return arrivals
