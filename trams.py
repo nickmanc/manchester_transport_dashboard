@@ -32,7 +32,7 @@ def get_tram_stations():
     if is_running_local():
         station_map = test_tram_stop_data
     else:
-        api_endpoint = f"https://api.tfgm.com/odata/Metrolinks"
+        api_endpoint = "https://api.tfgm.com/odata/Metrolinks"
         try:
             # Parse JSON response
             response = requests.get(api_endpoint, params=params, headers=headers)
@@ -54,7 +54,7 @@ def get_tram_stations():
     return station_map
 
 
-@st.cache_data(ttl=10)
+@st.cache_data(ttl=10, show_spinner=False)
 def get_tram_departures(met_stop_ids):
     trams = {}
     message = ""

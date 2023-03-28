@@ -4,11 +4,10 @@ import re
 import streamlit as st
 from bs4 import BeautifulSoup
 
-@st.cache_data(ttl=10)
+@st.cache_data(ttl=10, show_spinner=False)
 def get_bus_departures(station):
     #no api for this I can find so scraping the website
     url = f"https://tfgm.com/public-transport/bus/stations/{station}"
-# url = 'https://tfgm.com/public-transport/bus/stops/1800SJ32011'  #number 15 stop
     departures = []
     try:
         response = requests.get(url)

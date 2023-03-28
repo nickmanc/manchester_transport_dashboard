@@ -22,7 +22,7 @@ header = xsd.Element(
 header_value = header(TokenValue=LDB_TOKEN)
 
 
-@st.cache_data(ttl=10)
+@st.cache_data(ttl=10, show_spinner=False)
 def get_train_departures(station_code):
     departures = []
     try:
@@ -39,7 +39,7 @@ def get_train_departures(station_code):
     return departures
 
 
-@st.cache_data(ttl=10)
+@st.cache_data(ttl=10, show_spinner=False)
 def get_train_arrivals(station_code):
     arrivals = []
     try:

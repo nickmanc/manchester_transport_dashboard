@@ -5,6 +5,8 @@ from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
 from trams import get_tram_departures
 
+NO_TRAM_SCHEDULED_MESSAGE = "No trams currently scheduled to depart."
+
 #dashboard just for child 2
 
 st.set_page_config(layout="wide")
@@ -41,7 +43,7 @@ if datetime.now().hour < 11:
                 tramExpectedText = f"in **{tram['expected']}** minutes."
             from_container.markdown(f"**{tram['destination']}**  ({tram['carriages']}) **{tramExpectedText}**")
     else:
-        from_container.markdown("No trams currently scheduled to depart.")
+        from_container.markdown(NO_TRAM_SCHEDULED_MESSAGE)
 
 to_container = st.container()
 to_container.subheader(f'[{os.environ["child2_afternoon_name"]}]({os.environ["child2_afternoon_url"]})')
@@ -55,7 +57,7 @@ if len(trams) > 0:
             tramExpectedText = f"in **{tram['expected']}** minutes."
         to_container.markdown(f"**{tram['destination']}**  ({tram['carriages']}) **{tramExpectedText}**")
 else:
-    to_container.markdown("No trams currently scheduled to depart.")
+    to_container.markdown(NO_TRAM_SCHEDULED_MESSAGE)
 
 
 #if after 11am
@@ -73,7 +75,7 @@ if datetime.now().hour >= 11:
                 tramExpectedText = f"in **{tram['expected']}** minutes."
             from_container.markdown(f"**{tram['destination']}**  ({tram['carriages']}) **{tramExpectedText}**")
     else:
-        from_container.markdown("No trams currently scheduled to depart.")
+        from_container.markdown(NO_TRAM_SCHEDULED_MESSAGE)
 
 
 footer = f"""<style>

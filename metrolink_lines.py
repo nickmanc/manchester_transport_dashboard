@@ -8,7 +8,6 @@ params = {
     "$format": "json"
 }
 
-
 def get_metrolink_line_status():
     lines = []
     try:

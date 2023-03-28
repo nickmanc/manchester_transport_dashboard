@@ -71,7 +71,7 @@ def get_rail_stations():
                                             crscode = station.find('n:CrsCode', ns).text
                                             gm_stations[name] = crscode
             else:
-                logging.exception(f"Problem when retrieving rail stations, response was  {response.status_code}")
-        except Exception as e:
-            logging.exception('Exception when retrieving rail stations')
+                logging.error(f"Problem when retrieving rail stations, response was  {response.status_code}")
+        except Exception:
+            logging.error('Exception when retrieving rail stations')
     return gm_stations

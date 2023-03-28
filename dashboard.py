@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 
@@ -30,7 +31,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
 @st.cache_data(ttl=60 * 60 * 24)
 def get_cached_list_of_tram_stops():
     return get_tram_stations()
@@ -45,36 +45,35 @@ def get_cached_rail_stations():
 def get_cached_bus_stations():
     return get_bus_stations()
 
-# get the log level from the environment variable
-log_level = os.environ.get('LOG_LEVEL', 'INFO')
-# create logger object
-logger = logging.getLogger()
-# set log level based on environment variable
-logger.setLevel(getattr(logging, log_level.upper()))
+@st.cache_data
+def load_presets():
+    with open("presets.json", "r+") as presets_file:
+        return json.load(presets_file)
 
-# if (len(logger.handlers)<1):
-# create console handler with custom format
-console_handler = logging.StreamHandler()
-console_formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
-console_handler.setFormatter(console_formatter)
-# add console handler to logger
-logger.removeHandler(logger.handlers[0])
-logger.addHandler(console_handler)
+@st.cache_data
+def configure_logging():
+    # get the log level from the environment variable
+    log_level = os.environ.get('LOG_LEVEL', 'INFO')
+    # create logger object
+    logger = logging.getLogger()
+    # set log level based on environment variable
+    logger.setLevel(getattr(logging, log_level.upper()))
+    # create console handler with custom format
+    console_handler = logging.StreamHandler()
+    console_formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
+    console_handler.setFormatter(console_formatter)
+    # add console handler to logger
+    logger.removeHandler(logger.handlers[0]) #must be better way of doing this but remove default handler
+    logger.addHandler(console_handler)
 
-presets = {"Altrincham": {"Title": "Altrincham", "Metrolink": "Altrincham", "Rail": "Altrincham",
-                          "Bus": "Altrincham Interchange"},
-           "Piccadilly": {"Title": "Manchester Piccadilly", "Metrolink": "Piccadilly", "Rail": "Manchester Piccadilly",
-                          "Bus": "Manchester Piccadilly Gardens"},
-           "Airport": {"Title": "Manchester Airport", "Metrolink": "Manchester Airport", "Rail": "Manchester Airport",
-                       "Bus": "Manchester Airport The Station"},
-           "Custom": {"Title": "Manchester", "Metrolink": "Piccadilly", "Rail": "Manchester Piccadilly",
-                      "Bus": "Manchester Piccadilly Gardens"}}
+
+configure_logging()
+presets = load_presets()
 
 # st_autorefresh(interval=60 * 1000)
 st_autorefresh(interval=5 * 1000)
 with st.sidebar:
     selectedPreset = st.radio("Select a preset, or customise your own dashboard", presets.keys())
-    # st.session_state['selectedPreset'] = st.radio("Select a preset", presets.keys())
     selected_dashboard_title = st.text_input("Dashboard title",
                                              f"{presets[selectedPreset]['Title']} Transport Dashboard",
                                              disabled=selectedPreset != 'Custom')
@@ -122,7 +121,6 @@ if len(trams) > 0:
 else:
     col1.markdown("No trams currently scheduled to depart.")
 tramMessage = '**``' + tramDepartureInfo[1] + '``**'
-# tramMessage = '**``' + tramDepartureInfo[1].replace("^F0","").replace("^J","") + '``**'
 col1.markdown(tramMessage)
 col1.subheader("[Metrolink Status](https://tfgm.com/live-updates)")
 metrolinkLineStatuses = get_metrolink_line_status()
@@ -169,12 +167,15 @@ col3.subheader(
 buses = get_bus_departures(bus_stations[selected_bus_station_name]['id'])
 if len(buses) > 0:
     for bus in buses:
-        departureTimeText = f"**NOW**" if "Due" == bus['expected'] else f"at **{bus['expected']}**" if ":" in bus[
-            'expected'] else f"in **{bus['expected']} minutes**"
+        if "Due" == bus['expected']:
+            departureTimeText = "**NOW**"
+        elif ":" in bus['expected']:
+            departureTimeText = f"at **{bus['expected']}**"
+        else:
+            departureTimeText = f"in **{bus['expected']} minutes**"
         if not (bus['live']):  departureTimeText += "*"
         col3.write(
             f"**{bus['number']}** - **{bus['destination']}** - Stand {bus['stand']} {departureTimeText}")
-        # f"**{bus['number']}** ({bus['operator']}) **{bus['destination']}** - Stand {bus['stand']} {departureTimeText}")
 else:
     col3.write("No buses currently scheduled to depart.")
 
