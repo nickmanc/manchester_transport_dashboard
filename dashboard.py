@@ -207,6 +207,7 @@ footer = f"""<style>
       <td>Last updated: {current_manchester_time.strftime('%H:%M:%S')}</td>
       <td>Powered by National Rail Enquiries.</td>
       <td>Contains Transport for Greater Manchester data</td>
+      <td>Made with <a href="https://streamlit.io">Streamlit</a></td>
       <td>Version: {os.getenv("DASHBOARD_BUILD_VERSION", "local")}</td>
     </tr>
   </table>
