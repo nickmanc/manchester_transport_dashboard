@@ -1,3 +1,13 @@
+### Runtime arguments
+running_local=true  # this will skip the loading of station data which otherwise takes a few seconds on application startup.
+
+;LOG_LEVEL=WARN
+
+
+### running with docker compose
+
+    docker-compose up --build
+
 ### Required API Keys
 You'll need to get a API keys for the services this application uses.  For local use these can be stored in a file .streamlit/secrets.toml using this template
 

@@ -1,21 +1,12 @@
+import json
 import logging
 import os
 
-import streamlit as st
 import requests
 import xml.etree.ElementTree as et
 
-test_station_data = {'Horwich Parkway': 'HWI', 'Manchester Piccadilly': 'MAN', 'Adlington (Cheshire)': 'ADC', 'Altrincham': 'ALT', 'Appley Bridge': 'APB', 'Ardwick': 'ADK', 'Ashburys': 'ABY', 'Ashley': 'ASY', 'Ashton': 'AHN', 'Atherton': 'ATN', 'Belle Vue': 'BLV', 'Blackrod': 'BLK', 'Bolton': 'BON', 'Bramhall': 'BML', 'Bredbury': 'BDY', 'Brinnington': 'BNT', 'Broadbottom': 'BDB', 'Bryn': 'BYN', 'Burnage': 'BNA', 'Buxton': 'BUX', 'Castleton (Manchester)': 'CAS', 'Chapel-en-le-Frith': 'CEF', 'Chassen Road': 'CSR', 'Cheadle Hulme': 'CHU', 'Chelford (Cheshire)': 'CEL', 'Chinley': 'CLY', 'Clifton (Manchester)': 'CLI', 'Daisy Hill': 'DSY', 'Davenport': 'DVN', 'Deansgate': 'DGT', 'Denton': 'DTN', 'Dinting': 'DTG', 'Disley': 'DSL', 'Dove Holes': 'DVH', 'East Didsbury': 'EDY', 'Eccles (Manchester)': 'ECC', 'Fairfield': 'FRF', 'Farnworth': 'FNW', 'Flixton': 'FLI', 'Flowery Field': 'FLF', 'Furness Vale': 'FNV', 'Garswood': 'GSW', 'Gathurst': 'GST', 'Gatley': 'GTY', 'Glossop': 'GLO', 'Godley': 'GDL', 'Gorton': 'GTO', 'Greenfield': 'GNF', 'Guide Bridge': 'GUI', 'Hadfield': 'HDF', 'Hag Fold': 'HGF', 'Hale (Manchester)': 'HAL', 'Hall-i-th-Wood': 'HID', 'Hattersley': 'HTY', 'Hazel Grove': 'HAZ', 'Heald Green': 'HDG', 'Heaton Chapel': 'HTC', 'Hindley': 'HIN', 'Humphrey Park': 'HUP', 'Hyde Central': 'HYC', 'Hyde North': 'HYT', 'Ince (Manchester)': 'INC', 'Irlam': 'IRL', 'Kearsley (Manchester)': 'KSL', 'Levenshulme': 'LVM', 'Littleborough': 'LTL', 'Lostock': 'LOT', 'Manchester Oxford Road': 'MCO', 'Manchester United Football Ground': 'MUF', 'Manchester Victoria': 'MCV', 'Marple': 'MPL', 'Mauldeth Road': 'MAU', 'Middlewood': 'MDL', 'Mills Hill (Manchester)': 'MIH', 'Moorside': 'MSD', 'Moses Gate': 'MSS', 'Mossley (Manchester)': 'MSL', 'Moston': 'MSO', 'Navigation Road': 'NVR', 'New Mills Central': 'NMC', 'New Mills Newtown': 'NMN', 'Newton for Hyde': 'NWN', 'Orrell': 'ORR', 'Patricroft': 'PAT', 'Pemberton': 'PEM', 'Poynton': 'PYT', 'Prestbury': 'PRB', 'Reddish North': 'RDN', 'Reddish South': 'RDS', 'Rochdale': 'RCD', 'Romiley': 'RML', 'Rose Hill Marple': 'RSH', 'Ryder Brow': 'RRB', 'Salford Central': 'SFD', 'Salford Crescent': 'SLD', 'Smithy Bridge': 'SMB', 'Strines': 'SRN', 'Swinton (Manchester)': 'SNN', 'Todmorden': 'TOD', 'Trafford Park': 'TRA', 'Urmston': 'URM', 'Walkden': 'WKD', 'Walsden': 'WDN', 'Westhoughton': 'WHG', 'Whaley Bridge': 'WBR', 'Wigan Wallgate': 'WGW', 'Woodley': 'WLY', 'Woodsmoor': 'WSR', 'Manchester Airport': 'MIA', 'Stalybridge': 'SYB', 'Macclesfield': 'MAC', 'Stockport': 'SPT', 'Wigan North Western': 'WGN'}
-
-greater_manchester_postcodes = ["BL1", "BL2", "BL3", "BL4", "BL5", "BL6", "BL8", "BL9", "M1", "M11", "M12",
-                                "M13", "M14", "M15", "M16", "M17", "M18", "M19", "M2", "M20", "M21", "M22",
-                                "M23", "M24", "M25", "M26", "M27", "M28", "M29", "M3", "M30", "M31", "M32",
-                                "M33", "M34", "M35", "M38", "M4", "M40", "M41", "M43", "M44", "M45", "M46",
-                                "M5", "M50", "M6", "M7", "M8", "M9", "M90", "OL1", "OL10", "OL11", "OL15",
-                                "OL16", "OL2", "OL3", "OL4", "OL5", "OL6", "OL7", "OL8", "OL9", "SK1",
-                                "SK14", "SK15", "SK16", "SK2", "SK3", "SK4", "SK5", "SK6", "SK7", "SK8",
-                                "WA14", "WA15", "WN1", "WN2", "WN3", "WN4", "WN5", "WN6", "WN7"]
-
+with open("resources/greater_manchester_postcodes.json", 'r') as postcode_file:
+    greater_manchester_postcodes = json.load(postcode_file)
 def is_running_local():
     return 'running_local' in os.environ and os.environ['running_local'] == 'true'
 
@@ -27,6 +18,7 @@ def get_authentication_token():
             "password": os.environ["datafeeds_nationalrail_co_uk_password"]}
     requests.urllib3.disable_warnings()
     response = requests.post(url, data=data, verify=False)
+    token = None
     if response.status_code == 200:
         response_json = response.json()
         token = response_json['token']
@@ -44,7 +36,8 @@ def get_rail_stations():
     gm_stations = {}
 
     if is_running_local():
-        gm_stations = test_station_data
+        with open("resources/train_station_test_data.json", "r") as test_data_file:
+            gm_stations = json.load(test_data_file)
     else:
         try:
             response = requests.get(url, headers=headers)

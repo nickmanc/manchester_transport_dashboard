@@ -79,7 +79,7 @@ jobs:
         service_name=manchester-transport-dashboard
         # get the environment variables from the current deployment and insert them into the template
         aws lightsail get-container-services --service-name=manchester-transport-dashboard | jq -r '.containerServices[0].currentDeployment.containers["manchester-transport-dashboard"].environment' > env.json
-        jq -r --argjson envvars "$(jq -c '.' env.json)" '.containers["manchester-transport-dashboard"].environment=$envvars' deployment_template.json > deployment.json
+        jq -r --argjson envvars "$(jq -c '.' env.json)" '.containers["manchester-transport-dashboard"].environment=$envvars' resources/deployment_template.json > deployment.json
         # now use the template to create a new deployment
         aws lightsail create-container-service-deployment --service-name=manchester-transport-dashboard --cli-input-json file://deployment.json
         
