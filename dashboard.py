@@ -143,15 +143,14 @@ with st.sidebar:
                               key='preset_key', on_change=apply_preset)
     disable_fields = selectedPreset != 'Custom'
     with st.form(key='dashboard_form'):
-        # selected_dashboard_title = st.text_input("Dashboard title",
-        selected_dashboard_title = st.text_input("Dashboard title", f"{selected_dashboard_title}",
+        selected_dashboard_title = st.text_input("Dashboard Title", f"{selected_dashboard_title}",
                                                  key="dashboard_title", disabled=disable_fields)
 
         tram_stops = get_cached_list_of_tram_stops()
         tram_stop_names = sorted(list(tram_stops.keys()))
         selected_tram_stop_name_index = tram_stop_names.index(selected_tram_stop_name)
         selected_tram_stop_name = st.selectbox(
-            'Select a metrolink stop', tram_stop_names, index=selected_tram_stop_name_index, key="selected_tram_stop",
+            'Select a Metrolink stop', tram_stop_names, index=selected_tram_stop_name_index, key="selected_tram_stop",
             disabled=disable_fields)
         tram_stop_ids = tram_stops[selected_tram_stop_name]["location_ids"]
 

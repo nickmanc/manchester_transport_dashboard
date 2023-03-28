@@ -1,30 +1,30 @@
 {
   "Altrincham": {
-    "Title": "Altrincham",
+    "Title": "Altrincham Transport Dashboard",
     "Metrolink": "Altrincham",
     "Rail": "Altrincham",
     "Bus": "Altrincham Interchange"
   },
   "Piccadilly": {
-    "Title": "Manchester Piccadilly",
+    "Title": "Manchester Transport Dashboard",
     "Metrolink": "Piccadilly",
     "Rail": "Manchester Piccadilly",
     "Bus": "Manchester Piccadilly Gardens"
   },
   "Exchange Square": {
-    "Title": "Exchange Square",
+    "Title": "Exchange Square Transport Dashboard",
     "Metrolink": "Exchange Square",
     "Rail": "Manchester Victoria",
     "Bus": "Shudehill Interchange"
   },
   "Airport": {
-    "Title": "Manchester Airport",
+    "Title": "Manchester Airport Transport Dashboard",
     "Metrolink": "Manchester Airport",
     "Rail": "Manchester Airport",
     "Bus": "Manchester Airport The Station"
   },
   "Custom": {
-    "Title": "Manchester ",
+    "Title": "Manchester Transport Dashboard",
     "Metrolink": "Piccadilly",
     "Rail": "Manchester Piccadilly",
     "Bus": "Manchester Piccadilly Gardens"
