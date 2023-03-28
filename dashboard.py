@@ -192,7 +192,11 @@ footer = f"""<style>
     color: grey;
     justify-content: space-around;
   }}
-  
+
+  .footer table {{
+    position: fixed; /* make the element position fixed */
+    bottom: 0; /* position the element at the bottom of the page */
+  }}
   .footer td {{
     border: none; /* remove the borders from the table cells */
   }}
@@ -209,3 +213,11 @@ footer = f"""<style>
 </div>
 """
 st.markdown(footer, unsafe_allow_html=True)
+hide_default_format = """
+       <style>
+       #MainMenu {visibility: hidden; }
+       footer {visibility: hidden;}
+       </style>
+       """
+st.markdown(hide_default_format, unsafe_allow_html=True)
+
