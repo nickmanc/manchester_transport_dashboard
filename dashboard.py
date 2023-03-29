@@ -95,6 +95,12 @@ def apply_preset():
     st.session_state.selected_rail_station = preset["Rail"]
     st.session_state.selected_bus_station = preset["Bus"]
 
+def renew_cookie():
+    if ('renewed_cookie' not in st.session_state):
+        save_user_settings()
+        st.session_state['renewed_cookie'] = True
+
+
 # this needs to be called before any other streamlit code
 st.set_page_config(page_title="Manchester Transport Dashboard", page_icon=':railway_car:', layout="wide")
         # ,menu_items={
@@ -130,12 +136,12 @@ configure_logging()
 presets = load_presets()
 
 default_selection = presets['Custom']
+
 selected_preset_key = get_value_from_cookie_or_default(SELECTED_PRESET_KEY, 'Custom')
 selected_dashboard_title = get_value_from_cookie_or_default(DASHBOARD_TITLE_KEY, default_selection['Title'])
 selected_tram_stop_name = get_value_from_cookie_or_default(SELECTED_TRAM_STOP_KEY, default_selection['Metrolink'])
 selected_train_station_name = get_value_from_cookie_or_default(SELECTED_RAIL_STATION_KEY, default_selection['Rail'])
 selected_bus_station_name = get_value_from_cookie_or_default(SELECTED_BUS_STATION_KEY, default_selection['Bus'])
-
 manchester_tz = pytz.timezone('Europe/London')
 current_manchester_time = datetime.now().astimezone(manchester_tz)
 
@@ -205,7 +211,7 @@ if len(metrolinkLineStatuses) > 0:
         else:
             statusColour = "green"
 
-        tram_column.markdown(f"**{metrolinkLineStatus['name']}** - :{statusColour}[🛈 {metrolinkLineStatus['status']}]")
+        tram_column.markdown(f"**{metrolinkLineStatus['name']}** - :{statusColour}[{metrolinkLineStatus['status']}]")
 else:
     tram_column.write("No line status available")
 
@@ -294,3 +300,5 @@ footer = f"""<style>
 </div>
 """
 st.markdown(footer, unsafe_allow_html=True)
+
+renew_cookie() # this is to ensure that the cookie is renewed once per session
