@@ -4,6 +4,7 @@ import os
 import pytz
 import streamlit as st
 from datetime import datetime
+
 from streamlit_autorefresh import st_autorefresh
 from streamlit_cookies_manager import CookieManager
 
@@ -25,7 +26,7 @@ DASHBOARD_TITLE_KEY = "dashboard_title_key"
 
 SELECTED_PRESET_KEY = "selected_preset"
 
-DASHBOARD_DATA_KEY = "mtd-data"
+DASHBOARD_DATA_KEY = "mtd-data-v0.0.1"
 
 
 @st.cache_data(ttl=60 * 60 * 24)
@@ -94,9 +95,11 @@ def apply_preset():
     st.session_state.selected_rail_station = preset["Rail"]
     st.session_state.selected_bus_station = preset["Bus"]
 
-
 # this needs to be called before any other streamlit code
-st.set_page_config(layout="wide")
+st.set_page_config(page_title="Manchester Transport Dashboard", page_icon=':railway_car:', layout="wide")
+        # ,menu_items={
+        # 'Report a Bug': "mailto: bug@manchester-transport.co.uk",
+        # 'About': "This is a free application that pulls together data from sources such as [National Rail Enquiries](https://nationalrail.co.uk)  and [Transport for Greater Manchester](https://tfgm.com) to provide a single dashboard for transport in Manchester."})
 st_autorefresh(interval=10 * 1000)
 # cookies = EncryptedCookieManager(
 cookies = CookieManager( #TODO - switch to encrypted cookies
@@ -253,6 +256,9 @@ tram_column, rail_column, bus_column = st.columns(3)
 bus_column.write("                         _* timetabled_")
 
 footer = f"""<style>
+    
+   footer {{visibility: hidden;}}
+   #MainMenu {{visibility: hidden;}}
   .content-wrapper {{
     min-height: 100vh; /* set min-height to 100% viewport height */
     position: relative; /* add position relative for child positioning */
@@ -288,10 +294,3 @@ footer = f"""<style>
 </div>
 """
 st.markdown(footer, unsafe_allow_html=True)
-hide_default_format = """
-       <style>
-       #MainMenu {visibility: hidden; }
-       footer {visibility: hidden;}
-       </style>
-       """
-st.markdown(hide_default_format, unsafe_allow_html=True)
