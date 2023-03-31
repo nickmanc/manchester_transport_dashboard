@@ -131,7 +131,6 @@ st.markdown(
     ),
     unsafe_allow_html=True,
 )
-
 configure_logging()
 presets = load_presets()
 
@@ -154,7 +153,6 @@ with st.sidebar:
     with st.form(key='dashboard_form'):
         selected_dashboard_title = st.text_input("Dashboard Title", f"{selected_dashboard_title}",
                                                  key="dashboard_title", disabled=disable_fields)
-
         tram_stops = get_cached_list_of_tram_stops()
         tram_stop_names = sorted(list(tram_stops.keys()))
         selected_tram_stop_name_index = tram_stop_names.index(selected_tram_stop_name)
@@ -187,19 +185,23 @@ tram_column, rail_column, bus_column = st.columns(3)
 tram_column.subheader(
     f"[Metrolink ({selected_tram_stop_name})](https://tfgm.com{tram_stops[selected_tram_stop_name]['href']})")
 tramDepartureInfo = get_tram_departures(tram_stop_ids)
-trams = tramDepartureInfo[0]
-if len(trams) > 0:
-    for tram in trams:
-        if tram['expected'] == 0:
-            tramExpectedText = "NOW"
-        else:
-            tramExpectedText = f"in **{tram['expected']}** minutes."
-        tram_column.markdown(f"**{tram['destination']}**  ({tram['carriages']}) **{tramExpectedText}**")
+if tramDepartureInfo is None:
+    logging.exception("Failed to retrieve tram departure data")
+    tram_column.markdown("**``Failed to retrieve tram data``**")
 else:
-    tram_column.markdown("No trams currently scheduled to depart.")
-tramMessage = '**``' + tramDepartureInfo[1] + '``**'
-tram_column.markdown(tramMessage)
-tram_column.subheader("[Metrolink Status](https://tfgm.com/live-updates)")
+    trams = tramDepartureInfo[0]
+    if len(trams) > 0:
+        for tram in trams:
+            if tram['expected'] == 0:
+                tramExpectedText = "NOW"
+            else:
+                tramExpectedText = f"in **{tram['expected']}** minutes."
+            tram_column.markdown(f"**{tram['destination']}**  ({tram['carriages']}) **{tramExpectedText}**")
+    else:
+        tram_column.markdown("No trams currently scheduled to depart.")
+    tramMessage = '**``' + tramDepartureInfo[1] + '``**'
+    tram_column.markdown(tramMessage)
+    tram_column.subheader("[Metrolink Status](https://tfgm.com/live-updates)")
 
 metrolinkLineStatuses = get_metrolink_line_status()
 if len(metrolinkLineStatuses) > 0:
