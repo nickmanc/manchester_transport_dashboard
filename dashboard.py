@@ -186,7 +186,7 @@ tram_column.subheader(
     f"[Metrolink ({selected_tram_stop_name})](https://tfgm.com{tram_stops[selected_tram_stop_name]['href']})")
 tramDepartureInfo = get_tram_departures(tram_stop_ids)
 if tramDepartureInfo is None:
-    logging.exception("Failed to retrieve tram departure data")
+    logging.exception(f"Failed to retrieve tram departure data for {tram_stop_ids}")
     tram_column.markdown("**``Failed to retrieve tram data``**")
 else:
     trams = tramDepartureInfo[0]
