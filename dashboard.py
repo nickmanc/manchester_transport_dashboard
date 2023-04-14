@@ -107,6 +107,20 @@ st.set_page_config(page_title="Manchester Transport Dashboard", page_icon=':rail
         # 'Report a Bug': "mailto: bug@manchester-transport.co.uk",
         # 'About': "This is a free application that pulls together data from sources such as [National Rail Enquiries](https://nationalrail.co.uk)  and [Transport for Greater Manchester](https://tfgm.com) to provide a single dashboard for transport in Manchester."})
 st_autorefresh(interval=10 * 1000)
+
+#add google analytics
+st.markdown(
+    f"""
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id={os.environ["google_tag_id"]}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){{dataLayer.push(arguments);}}
+            gtag('js', new Date());
+            gtag('config', '{os.environ["google_tag_id"]}');
+        </script>
+    """, unsafe_allow_html=True)
+
 # cookies = EncryptedCookieManager(
 cookies = CookieManager( #TODO - switch to encrypted cookies
     prefix="nickmanc/manchester-transport-dashboard/"
