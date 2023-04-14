@@ -234,7 +234,9 @@ else:
 rail_column.subheader(
     f"[Rail({selected_train_station_name})](https://ojp.nationalrail.co.uk/service/ldbboard/dep/"
     f"{rail_stations[selected_train_station_name]})")
-rail_column.subheader("Departures")
+
+if show_arrivals:
+    rail_column.subheader("Departures")
 trains = get_train_departures(rail_stations[selected_train_station_name])
 if len(trains) > 0:
     for train in trains:
