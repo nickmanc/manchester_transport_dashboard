@@ -3,8 +3,7 @@ name: Docker Image CI
 env:
   IMAGE_VERSION: 0.0.${{github.run_number}}
   AWS_REGION: eu-west-2
-  GOOGLE_ANALYTICS_TAG: ${{GOOGLE_ANALYTICS_TAG}}
-
+  
 on:
   push:
     branches: [ "main" ]
