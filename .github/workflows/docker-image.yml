@@ -3,7 +3,7 @@ name: Docker Image CI
 env:
   IMAGE_VERSION: 0.0.${{github.run_number}}
   AWS_REGION: eu-west-2
-  
+
 on:
   push:
     branches: [ "main" ]
@@ -70,7 +70,7 @@ jobs:
         context: .
         build-args: |
           DASHBOARD_BUILD_VERSION=${{env.IMAGE_VERSION}}
-          GOOGLE_ANALYTICS_TAG=${{env.GOOGLE_ANALYTICS_TAG}}
+          GOOGLE_ANALYTICS_TAG=${{vars.GOOGLE_ANALYTICS_TAG}}
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
