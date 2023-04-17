@@ -131,3 +131,8 @@ dmypy.json
 /.streamlit/secrets.toml
 .idea/
 change-resource-record-sets.json
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
